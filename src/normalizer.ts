@@ -218,18 +218,17 @@ rules.set('Transform definitions to $defs', (schema, fileName) => {
   }
 })
 
-rules.set('Transform const to singleton enum', schema => {
-  if (schema.const !== undefined) {
-    schema.enum = [schema.const]
-    delete schema.const
-  }
-})
-
-rules.set('Add tsEnumNames to enum types', (schema, _, options) => {
-  if (isEnumTypeWithoutTsEnumNames(schema) && options.inferStringEnumKeysFromValues) {
-    schema.tsEnumNames = schema.enum?.map(String)
-  }
-})
+rules.set(
+  'Transform const to singleton enum and infer tsEnumNames from values when inferStringEnumKeysFromValues',
+  (schema, _, options) => {
+    if (schema.const !== undefined) {
+      schema.enum = [schema.const]
+      delete schema.const
+    } else if (isEnumTypeWithoutTsEnumNames(schema) && options.inferStringEnumKeysFromValues) {
+      schema.tsEnumNames = schema.enum?.map(String)
+    }
+  },
+)
 
 export function normalize(
   rootSchema: LinkedJSONSchema,
