@@ -225,7 +225,7 @@ rules.set(
       schema.enum = [schema.const]
       delete schema.const
     } else if (isEnumTypeWithoutTsEnumNames(schema) && options.inferStringEnumKeysFromValues) {
-      schema.tsEnumNames = schema.enum?.map(String)
+      schema.tsEnumNames = schema.enum?.map(value => String(value).toUpperCase())
     }
   },
 )
